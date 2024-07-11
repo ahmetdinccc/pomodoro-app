@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -10,40 +9,6 @@ class Edit extends StatefulWidget {
 }
 
 class _EditState extends State<Edit> {
-  Timer? _timer;
-
-  int breakMinutes = 5;
-  int breakSeconds = 0;
-
-  bool isTime = true;
-
-
-
-  void startBreak() {
-    setState(() {
-      isTime = false;
-    });
-  }
-
-  void startFocus() {
-    setState(() {
-    });
-  }
-
-  void resetTimer() {
-    if (isTime) {
-      startFocus();
-    } else {
-      startBreak();
-    }
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
