@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:pomodoro_app/page/home_screen.dart';
 
 class Edit extends StatefulWidget {
   const Edit({super.key});
@@ -23,6 +24,20 @@ class _EditState extends State<Edit> {
                   width: MediaQuery.of(context).size.width,
                   fit: BoxFit.cover,
                 ),
+                Padding(
+                    padding: const EdgeInsets.only(top: 45, left: 10),
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const Home()),
+                            (route) => false);
+                      },
+                      icon: Image.asset(
+                        'assets/images/back 3.png',
+                      ),
+                    )),
                 const Positioned(
                   top: 75,
                   left: 90,
