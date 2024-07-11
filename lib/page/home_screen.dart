@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:pomodoro_app/page/edit_screen.dart';
+import 'package:pomodoro_app/page/exam_calendar.dart';
 import 'package:pomodoro_app/widget/start_stop_button.dart';
 import 'package:pomodoro_app/widget/tools_button.dart';
 
@@ -98,6 +99,20 @@ class _HomeState extends State<Home> {
                   'assets/images/Ellipse 3.png',
                   width: MediaQuery.of(context).size.width,
                   fit: BoxFit.cover,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 45, left: 10, right: 10),
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const Calendar()));
+                        },
+                        icon: Image.asset('assets/images/calendar 1.png')),
+                  ),
                 ),
                 const Positioned(
                   top: 75,
@@ -200,7 +215,7 @@ class _HomeState extends State<Home> {
               isRunning: _isRunning,
             ),
             const SizedBox(
-              height: 50,
+              height: 45,
             ),
             Visibility(
               visible: !_isRunning,
@@ -236,11 +251,10 @@ class _HomeState extends State<Home> {
                           padding: const EdgeInsets.only(left: 6),
                           child: MyTools(
                             onPressed: () {
-                              Navigator.pushAndRemoveUntil(
+                              Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const Edit()),
-                                  (route) => false);
+                                      builder: (context) => const Edit()));
                             },
                             mytext: "Zamanı Kendin Ayarla",
                             myfontsize: 20,
