@@ -22,6 +22,7 @@ class _HomeState extends State<Home> {
 
   bool _isRunning = false;
   bool isTime = true;
+  bool _wasManuallyStopped = false;
 
   void _startTimer() {
     if (_timer != null) {
@@ -30,6 +31,7 @@ class _HomeState extends State<Home> {
 
     setState(() {
       _isRunning = true;
+      _wasManuallyStopped = false;
     });
 
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -54,6 +56,7 @@ class _HomeState extends State<Home> {
     _timer?.cancel();
     setState(() {
       _isRunning = false;
+      _wasManuallyStopped = true;
     });
   }
 
@@ -69,15 +72,27 @@ class _HomeState extends State<Home> {
     setState(() {
       _focusMinutes = 25;
       _focusSeconds = 0;
+      isTime = true;
     });
   }
 
   void resetTimer() {
-    if (isTime) {
-      startFocus();
+    if (_wasManuallyStopped) {
+      if (isTime) {
+        startFocus();
+      } else {
+        startBreak();
+      }
     } else {
-      startBreak();
+      if (isTime) {
+        startFocus();
+      } else {
+        startBreak();
+      }
     }
+    setState(() {
+      _wasManuallyStopped = false;
+    });
   }
 
   @override
@@ -111,7 +126,11 @@ class _HomeState extends State<Home> {
                               MaterialPageRoute(
                                   builder: (context) => const Calendar()));
                         },
-                        icon: Image.asset('assets/images/calendar 1.png')),
+                        icon: Image.asset(
+                          'assets/images/calendar (1).png',
+                          width: 34,
+                          height: 34,
+                        )),
                   ),
                 ),
                 const Positioned(

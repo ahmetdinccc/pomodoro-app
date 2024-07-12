@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pomodoro_app/page/home_screen.dart';
+import 'package:pomodoro_app/widget/calender_card.dart';
 
 class Calendar extends StatefulWidget {
   const Calendar({super.key});
@@ -15,6 +16,7 @@ class _CalendarState extends State<Calendar> {
       backgroundColor: const Color(0xFF250E42),
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Stack(
               children: [
@@ -24,19 +26,20 @@ class _CalendarState extends State<Calendar> {
                   fit: BoxFit.cover,
                 ),
                 Padding(
-                    padding: const EdgeInsets.only(top: 45, left: 10),
-                    child: IconButton(
-                      onPressed: () {
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const Home()),
-                            (route) => false);
-                      },
-                      icon: Image.asset(
-                        'assets/images/back 3.png',
-                      ),
-                    )),
+                  padding: const EdgeInsets.only(top: 45, left: 10),
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => const Home()),
+                        (route) => false,
+                      );
+                    },
+                    icon: Image.asset(
+                      'assets/images/back 3.png',
+                    ),
+                  ),
+                ),
                 const Positioned(
                   top: 75,
                   left: 90,
@@ -51,41 +54,15 @@ class _CalendarState extends State<Calendar> {
                 ),
               ],
             ),
-            const SizedBox(
-              height: 56,
+            const SizedBox(height: 15),
+            ListView.builder(
+              itemCount: 5,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                return const MyCalenderCard();
+              },
             ),
-            Stack(children: [
-              Center(
-                child: Container(
-                  width: 372,
-                  height: 95,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white),
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.only(top: 18, left: 80),
-                child: Text(
-                  "TYT",
-                  style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.only(top: 61, left: 78),
-                child: Text(
-                  "14-06-2025",
-                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-                ),
-              ),
-              Center(
-                child: Container(
-                  width: 1,
-                  height: 95,
-                  color: const Color(0xFF959595),
-                ),
-              )
-            ])
           ],
         ),
       ),
