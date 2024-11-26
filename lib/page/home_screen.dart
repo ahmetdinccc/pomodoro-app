@@ -103,16 +103,20 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       backgroundColor: const Color(0xFF250E42),
       body: SingleChildScrollView(
         child: Column(
           children: [
+            // Üst Bölüm (Başlık ve Takvim Butonu)
             Stack(
               children: [
                 Image.asset(
                   'assets/images/Ellipse 3.png',
-                  width: MediaQuery.of(context).size.width,
+                  width: screenWidth,
                   fit: BoxFit.cover,
                 ),
                 Padding(
@@ -120,17 +124,20 @@ class _HomeState extends State<Home> {
                   child: Align(
                     alignment: Alignment.topRight,
                     child: IconButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const Calendar()));
-                        },
-                        icon: Image.asset(
-                          'assets/images/calendar (1).png',
-                          width: 34,
-                          height: 34,
-                        )),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Calendar(),
+                          ),
+                        );
+                      },
+                      icon: Image.asset(
+                        'assets/images/calendar (1).png',
+                        width: 34,
+                        height: 34,
+                      ),
+                    ),
                   ),
                 ),
                 const Positioned(
@@ -147,166 +154,117 @@ class _HomeState extends State<Home> {
                 ),
               ],
             ),
+            // Zaman Göstergeleri
             Padding(
-              padding: const EdgeInsets.only(top: 140, left: 25),
+              padding: const EdgeInsets.only(top: 140, left: 25, right: 25),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Stack(
-                    children: [
-                      Container(
-                        height: 185,
-                        width: 150,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(64),
-                          color: const Color(0xFFD9D9D9),
-                        ),
-                      ),
-                      Positioned(
-                        top: 45,
-                        left: 35,
-                        right: 35,
-                        child: Text(
-                          '$_focusMinutes'.padLeft(2, '0'),
-                          style: const TextStyle(
-                            fontSize: 64,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
+                  _buildTimeDisplay(
+                      value: _focusMinutes.toString().padLeft(2, '0')),
+                  const Text(
+                    ":",
+                    style: TextStyle(fontSize: 64, color: Colors.white),
                   ),
-                  Column(
-                    children: [
-                      Container(
-                        height: 25,
-                        width: 25,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF656565),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 70,
-                        width: 70,
-                      ),
-                      Container(
-                        height: 25,
-                        width: 25,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF656565),
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Stack(
-                    children: [
-                      Container(
-                        height: 185,
-                        width: 150,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(64),
-                          color: const Color(0xFFD9D9D9),
-                        ),
-                      ),
-                      Positioned(
-                        top: 45,
-                        left: 35,
-                        right: 35,
-                        child: Text(
-                          '$_focusSeconds'.padLeft(2, '0'),
-                          style: const TextStyle(
-                            fontSize: 64,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                  _buildTimeDisplay(
+                      value: _focusSeconds.toString().padLeft(2, '0')),
                 ],
               ),
             ),
-            const SizedBox(
-              height: 46,
-            ),
+            const SizedBox(height: 46),
+            // Başlat/Durdur Butonu
             MyStartStop(
               onPressed: _isRunning ? _stopTimer : _startTimer,
               isRunning: _isRunning,
             ),
-            const SizedBox(
-              height: 45,
-            ),
+            const SizedBox(height: 45),
+            // Ayarlar ve Reset Butonları
             Visibility(
               visible: !_isRunning,
-              child: Stack(
-                children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(40),
-                        topRight: Radius.circular(40),
-                      ),
-                      gradient: LinearGradient(
-                        colors: [
-                          Color(0xB3221674),
-                          Color(0x973D25C7),
-                          Color(0x8D3A25C6),
-                        ],
-                      ),
-                    ),
-                    height: 220,
+              child: Container(
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(40),
+                    topRight: Radius.circular(40),
                   ),
-                  Positioned(
-                    top: 35,
-                    left: 25,
-                    child: Row(
-                      children: [
-                        MyTools(
-                          onPressed: startFocus,
-                          mytext: "Çalışma",
-                          myfontsize: 20,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 6),
-                          child: MyTools(
+                  gradient: LinearGradient(
+                    colors: [
+                      Color(0xB3221674),
+                      Color(0x973D25C7),
+                      Color(0x8D3A25C6),
+                    ],
+                  ),
+                ),
+                height: 220,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 35, left: 25, right: 25),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          MyTools(
+                            onPressed: startFocus,
+                            mytext: "Çalışma",
+                            myfontsize: 20,
+                          ),
+                          MyTools(
                             onPressed: () {
                               Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => const Edit()));
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const Edit(),
+                                ),
+                              );
                             },
                             mytext: "Zamanı Kendin Ayarla",
                             myfontsize: 20,
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Positioned(
-                    top: 136,
-                    left: 25,
-                    child: Row(
-                      children: [
-                        MyTools(
-                          onPressed: startBreak,
-                          mytext: "Mola",
-                          myfontsize: 20,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 6),
-                          child: MyTools(
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          MyTools(
+                            onPressed: startBreak,
+                            mytext: "Mola",
+                            myfontsize: 20,
+                          ),
+                          MyTools(
                             onPressed: resetTimer,
                             mytext: "Sıfırla",
                             myfontsize: 20,
                           ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  // Zaman göstergesi widget
+  Widget _buildTimeDisplay({required String value}) {
+    return Container(
+      height: 185,
+      width: 150,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(64),
+        color: const Color(0xFFD9D9D9),
+      ),
+      child: Center(
+        child: Text(
+          value,
+          style: const TextStyle(
+            fontSize: 64,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );
