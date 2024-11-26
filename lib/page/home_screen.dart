@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pomodoro_app/page/edit_screen.dart';
 import 'package:pomodoro_app/page/exam_calendar.dart';
 import 'package:pomodoro_app/widget/start_stop_button.dart';
 import 'package:pomodoro_app/widget/tools_button.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -14,8 +16,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   Timer? _timer;
-  int _focusMinutes = 25;
-  int _focusSeconds = 0;
+  int _focusMinutes = 0;
+  int _focusSeconds = 5;
 
   int breakMinutes = 5;
   int breakSeconds = 0;
@@ -23,6 +25,8 @@ class _HomeState extends State<Home> {
   bool _isRunning = false;
   bool isTime = true;
   bool _wasManuallyStopped = false;
+
+  final AudioPlayer _audioPlayer = AudioPlayer();
 
   void _startTimer() {
     if (_timer != null) {
@@ -43,9 +47,18 @@ class _HomeState extends State<Home> {
             _focusMinutes--;
             _focusSeconds = 59;
           } else {
+            // Süre bitince alarm çal ve modu değiştir
             _timer?.cancel();
             _isRunning = false;
-            startBreak();
+            _alarm(); // Alarm çal
+
+            if (isTime) {
+              // Çalışma süresi bittiyse mola süresine geç
+              startBreak(); // Modu değiştir ama başlatma
+            } else {
+              // Mola süresi bittiyse çalışma süresine geç
+              startFocus(); // Modu değiştir ama başlatma
+            }
           }
         }
       });
@@ -70,7 +83,7 @@ class _HomeState extends State<Home> {
 
   void startFocus() {
     setState(() {
-      _focusMinutes = 25;
+      _focusMinutes = 1;
       _focusSeconds = 0;
       isTime = true;
     });
@@ -99,6 +112,11 @@ class _HomeState extends State<Home> {
   void dispose() {
     _timer?.cancel();
     super.dispose();
+  }
+
+  Future<void> _alarm() async {
+    await _audioPlayer.play(AssetSource(
+        'Audio/çalar saat alarm ve zil sesi indir.mp3')); // Ses dosyasını çal
   }
 
   @override
@@ -256,7 +274,7 @@ class _HomeState extends State<Home> {
       width: 150,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(64),
-        color: const Color(0xFFD9D9D9),
+        color: const Color(0xFFCEC6C6),
       ),
       child: Center(
         child: Text(
@@ -268,5 +286,12 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+        .add(DiagnosticsProperty<AudioPlayer>('_audioPlayer', _audioPlayer));
   }
 }
